@@ -24,4 +24,6 @@ public interface StudentDao extends JpaRepository<StudentModel, Long>{
 
 	Optional<StudentModel> findByStdusername(String stdusername);
 
+	String getByMobile(Long mobile);
+
 }

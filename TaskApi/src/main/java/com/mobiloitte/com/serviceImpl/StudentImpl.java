@@ -29,9 +29,6 @@ public class StudentImpl implements StudentService {
 	@Value("${fromPhoneNo}")
 	private String from;
 
-	@Value("${toPhoneNo}")
-	private String to;
-
 	@Value("${accountSID}")
 	private String account_sid;
 
@@ -155,22 +152,32 @@ public class StudentImpl implements StudentService {
 		return studDao.findByRollno(rollno);
 	}
 
-	
 	@Override
-	public ResponseEntity<String> sendOtp() {
+	public ResponseEntity<String> sendOtp(StudentDto studentDto) {
+		Optional<StudentModel> mobOptional=studDao.findByMobile(studentDto.getMobile());
+		if(!mobOptional.isPresent())
+		{
+			return new ResponseEntity<>("No mobile number found",HttpStatus.NOT_FOUND);
+		}
+		else {
 		int max = 10000000;
 		int min = 20000000;
 		Long a = (long) (Math.random() * (max - min + 1) + min);
 		String msg = "Your OTP is " + a;
 		try {
+		
 			Twilio.init(account_sid, auth_Token);
-			Message message = Message.creator(new PhoneNumber(to), new PhoneNumber(from), msg).create();
-			
+			 Message.creator(
+                     new PhoneNumber(from), // your Twilio number (sender phone number)
+                     new PhoneNumber(studentDto.getMobile()), // receiver phone number
+                     msg
+             ).create());	
 			return new ResponseEntity<>("OTP Send Successfully...", HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return new ResponseEntity<>("OTP Send Failed...", HttpStatus.OK);
+	}
 	}
 
 	

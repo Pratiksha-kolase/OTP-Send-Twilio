@@ -67,10 +67,10 @@ public class StudentController {
 
 		return studService.getByRollNo(rollno);
 	}
-	@GetMapping("/sendotp")
-	public ResponseEntity<String> send()
+	@PostMapping("/sendotp")
+	public ResponseEntity<String> send(@RequestBody StudentDto studentDto)
 	{
-		return studService.sendOtp();
+		return studService.sendOtp(studentDto);
 	}
 	
 	

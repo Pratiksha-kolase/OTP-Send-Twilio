@@ -30,7 +30,8 @@ public interface StudentService {
 
 	Optional<StudentModel> getByRollNo(Long rollno);
 
-	ResponseEntity<String> sendOtp();
+
+	ResponseEntity<String> sendOtp(StudentDto studentDto);
 
 
 	
